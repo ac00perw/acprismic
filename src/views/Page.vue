@@ -1,15 +1,15 @@
 <template>
     <div>
-        <h1 class="text-4xl font-bold mt-4" v-if="data.title[0]">{{ data.title[0].text }}</h1>
+        <h1 class="text-4xl font-bold mt-4" v-if="data && data.title[0]">{{ data.title[0].text }}</h1>
         <div class="home w-full flex flex-wrap container mx-auto" v-if="data">
             <div class="w-full md:w-1/2 pr-2">
                 <picture v-if="data && data.hero_image">
                     <img :src="data.hero_image.url" />
                 </picture>
             </div>
-            <div class="w-full md:w-1/2 text-left">
+            <div class="w-full text-left">
                 <template v-for="body, index in data.body">
-                    <p v-html="body.text" :key="index"></p>
+                    <div class="flex flex-wrap" v-html="body.text" :key="index"></div>
                 </template>
             </div>
         </div>
@@ -43,6 +43,12 @@ export default {
                 .then((d) => vm.data = d.data);
 
         }
+    },
+    render(h) {
+        return h('div', this.elements.map(function(elm) {
+                return h(elm.render())
+            })
+        )
     }
 }
 </script>
